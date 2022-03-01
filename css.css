@@ -161,7 +161,20 @@ header span {
   font-weight: 900;
   text-shadow: 1px 2px 0px var(--ylw);
   z-index: 9;
+  animation: border-banner 1s infinite alternate;
 }
+
+@keyframes border-banner {
+  from {
+    border: 2px solid var(--grn);
+    /* text-shadow: 1px 2px 0px var(--ylw); */
+  }
+  to {
+    border: 2px solid var(--ylw);
+    /* text-shadow: 1px 2px 0px var(--grn); */
+  }
+}
+
 #banner.hidden {
   display: none;
 }
@@ -175,6 +188,18 @@ header span {
   content: '';
   background-color: white;
   z-index: -1;
+  animation: border-banner 1s infinite alternate-reverse -1s;
+}
+
+#banner #message div:first-of-type {
+  animation: text-shadow 1s infinite alternate -2s;
+}
+#banner #message div:nth-of-type(2) {
+  animation: text-shadow 1s infinite alternate-reverse -2s;
+}
+@keyframes text-shadow {
+  from {text-shadow: 1px 2px 0px var(--ylw);}
+  to {text-shadow: 1px 2px 0px var(--grn);}
 }
 
 #buttons {
@@ -210,9 +235,9 @@ header span {
 
 #reset {
   /* text-decoration: underline; */
-  margin-top: 5px;
+  margin-top: 1em;
   padding:  0.4em 0.5em;
   border: 2px solid grey;
   cursor: pointer;
-  display: none;
+  /* display: none; */
 }

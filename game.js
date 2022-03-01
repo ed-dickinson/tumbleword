@@ -155,7 +155,7 @@ let current_guess = '';
 const gameWon = () => {
   console.log('you win!')
   banner.classList.remove('hidden')
-  banner_message.innerHTML = 'WIN!';
+  banner_message.innerHTML = '<div>YOU</div><div>WIN!</div>';
   rows[row-1].classList.add('winning-row');
   game_over = true;
   // banner_goes.innerHTML = (guess) + ' guess' + (guess > 2 ? 'es' : '');
@@ -165,7 +165,7 @@ const gameWon = () => {
 const gameLost = () => {
   console.log('you lose...')
   banner.classList.remove('hidden')
-  banner_message.innerHTML = 'LOSE...';
+  banner_message.innerHTML = '<div>GAME</div><div>OVER</div>';
   // banner_goes.innerHTML = (guess-1) + ' guess' + (guess > 2 ? 'es' : '');
   game_over = true;
   clearInterval(gamePlayLoop)
