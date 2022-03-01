@@ -146,10 +146,11 @@ header span {
   z-index: 100;
   position: absolute;
   display: block;
-  top: 6em;
+  top: 4em;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
+  background-color: rgba(255,255,255,0.75);
   font-size: 1.5em;
   /* border-top: 2px solid var(--grn);
   border-left: 2px solid var(--ylw);
@@ -167,11 +168,9 @@ header span {
 @keyframes border-banner {
   from {
     border: 2px solid var(--grn);
-    /* text-shadow: 1px 2px 0px var(--ylw); */
   }
   to {
     border: 2px solid var(--ylw);
-    /* text-shadow: 1px 2px 0px var(--grn); */
   }
 }
 
@@ -188,9 +187,11 @@ header span {
   content: '';
   background-color: white;
   z-index: -1;
-  animation: border-banner 1s infinite alternate-reverse -1s;
+  animation: border-banner 1s infinite alternate-reverse -2s;
 }
-
+#banner #message {
+  font-size: 1.5em;
+}
 #banner #message div:first-of-type {
   animation: text-shadow 1s infinite alternate -2s;
 }
@@ -198,8 +199,14 @@ header span {
   animation: text-shadow 1s infinite alternate-reverse -2s;
 }
 @keyframes text-shadow {
-  from {text-shadow: 1px 2px 0px var(--ylw);}
-  to {text-shadow: 1px 2px 0px var(--grn);}
+  from {
+    text-shadow: 1px 2px 0px var(--ylw);
+    color: var(--grn);
+  }
+  to {
+    text-shadow: 1px 2px 0px var(--grn);
+    color: var(--ylw);
+  }
 }
 
 #buttons {

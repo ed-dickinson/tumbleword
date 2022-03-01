@@ -1,3 +1,7 @@
+
+// do reply button
+
+
 let target_word, target_word_array, all_letters;
 
 let goes = 0;
