@@ -193,10 +193,10 @@ header span {
   font-size: 1.5em;
 }
 #banner #message div:first-of-type {
-  animation: text-shadow 1s infinite alternate -2s;
+  animation: text-shadow 1s infinite alternate -2.5s;
 }
 #banner #message div:nth-of-type(2) {
-  animation: text-shadow 1s infinite alternate-reverse -2s;
+  animation: text-shadow 1s infinite alternate-reverse -2.5s;
 }
 @keyframes text-shadow {
   from {
