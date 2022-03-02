@@ -158,8 +158,8 @@ let current_guess = '';
 
 const gameWon = () => {
   console.log('you win!')
-  banner.classList.remove('hidden')
   banner_message.innerHTML = '<div>YOU</div><div>WIN!</div>';
+  setTimeout(()=>{banner.classList.remove('hidden');},1000)
   rows[row-1].classList.add('winning-row');
   game_over = true;
   // banner_goes.innerHTML = (guess) + ' guess' + (guess > 2 ? 'es' : '');
@@ -208,10 +208,18 @@ const resetGame = () => {
     space.classList.remove('wrong-position')
     space.classList.remove('wrong-letter')
   })
+  document.querySelectorAll('#tiles .row').forEach(row => {
+    row.classList.remove('winning-row')
+  })
 
   banner.classList.add('hidden');
 
+  game_over = false;
+  letter_in_play = false;
+
   goes = 0;
+
+  gamePlayLoop = setInterval(gamePlay, speed*100);
 }
 
 const replay_button = document.querySelector('#reset')

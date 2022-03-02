@@ -132,6 +132,10 @@ header span {
 #tiles .winning-row .space {
   animation: winningrow 1s infinite  linear;
 }
+#tiles .winning-row .space:nth-of-type(4) {animation-delay: -0.1s;}
+#tiles .winning-row .space:nth-of-type(3) {animation-delay: -0.2s;}
+#tiles .winning-row .space:nth-of-type(2) {animation-delay: -0.3s;}
+#tiles .winning-row .space:nth-of-type(1) {animation-delay: -0.4s;}
 
 @keyframes winningrow {
   from {border-color: white;}
