@@ -361,9 +361,4 @@ const gamePlay = () => {
    // drops a letter
 }
 
-let gamePlayLoop;
-
-// account for intro delay
-setTimeout(()=> {
-  gamePlayLoop = setInterval(gamePlay, speed*100);
-},1800)
+let gamePlayLoop = setInterval(gamePlay, speed*100);

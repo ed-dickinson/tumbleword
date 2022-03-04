@@ -15,7 +15,6 @@ body {
 header {
   font-weight: 900;
   font-size: 2em;
-  position: relative;
 }
 header span {
   animation: red-green 2s infinite linear alternate;
@@ -252,18 +251,4 @@ header span {
   border: 2px solid grey;
   cursor: pointer;
   /* display: none; */
-}
-
-#intro-title {
-  position: absolute;
-  left: calc(50% + 0.5em);
-  transform: translateX(-50%);
-  background-color: white;
-  height: 100%;
-
-}
-
-#intro-title .letter {
-  display: inline-block;
-  position: relative;
 }
