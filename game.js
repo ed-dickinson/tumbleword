@@ -18,24 +18,24 @@ const setUp = () => {
     extra_letter_array.push(letter);
   })
 
-  const extra_letters_to_add = 3;
+  let extra_letters_to_add = 3;
+  extra_letters_to_add = 0;
 
   all_letters = target_word.split('');
-
-  while (all_letters.length < 8) {
-    let letter = extra_letter_array.shift();
-    if (!target_word.includes(letter)) {
-      all_letters.push(letter);
+  if (extra_letters_to_add > 0) {
+    while (all_letters.length < target_word + extra_letters_to_add) {
+      let letter = extra_letter_array.shift();
+      if (!target_word.includes(letter)) {
+        all_letters.push(letter);
+      }
     }
   }
+
 }
 setUp();
 
 console.log(all_letters)
 
-// const keyboard_container = document.querySelector('#keyboard');
-//
-// const keyboard_keys = 'qwertyuiopasdfghjkl>zxcvbnm<'
 
 const banner = document.querySelector('#banner');
 const banner_message = document.querySelector('#message');
@@ -48,58 +48,6 @@ const dom = {
 const tiles_container = document.querySelector('#tiles')
 
 let rows = []
-
-// const dropLetter = (letter, column) => {
-//   let i = 0;
-//
-//   const triggerRowEnd = (row) => {
-//
-//     // console.log('row end?', row, rows[row].children[column],letter, target_word_array[column])
-//     if (letter === target_word_array[column]) {
-//       rows[row].children[column].classList.add('right-position');
-//     } else if (target_word.includes(letter)) {
-//       rows[row].children[column].classList.add('wrong-position');
-//     } else {
-//       rows[row].children[column].classList.add('wrong-letter');
-//
-//       all_letters.splice(all_letters.indexOf(last_letter), 1)
-//       console.log(all_letters)
-//     }
-//     // rows[row];
-//
-//
-//     if (Array.from(rows[row].children).every((child)=>{
-//       return child.classList.contains('right-position')
-//     })) {
-//       gameWon();
-//     } else if (goes === 30) {
-//       gameLost();
-//     }
-//   }
-//
-//   const checkAndDrop = (column) => {
-//     console.log(column)
-//     if (i < 6 && rows[i].children[column].innerHTML === '') {
-//       rows[i].children[column].innerHTML = letter;
-//       if (i > 0) {
-//         rows[i-1].children[column].innerHTML = '';
-//       }
-//     } else {
-//       triggerRowEnd(i-1);
-//       clearInterval(timed_loop);
-//     }
-//     i++;
-//   }
-//   checkAndDrop(column);
-//   // let timed_loop = setInterval(checkAndDrop,speed*100);
-// }
-
-// const selectColumn = (column) => {
-//   // console.log(column)
-//   dropLetter(next_letter, column)
-//   updateNextLetter();
-//   goes++;
-// }
 
 for (let i = 0; i < 6; i++) {
   let row = document.createElement('div');
@@ -179,28 +127,30 @@ const gameLost = () => {
 let guess = 1;
 let tile = 1;
 
-const replayGame = () => {
-  target_word = valid_answers[Math.floor(Math.random()*valid_answers.length)]
-  guess = 1;
-  tile = 1;
-  current_guess = '';
-  banner.classList.add('hidden');
-  rows.forEach(row=>{
-    for (let i = 0; i < 5; i++) {
-      row.children[i].classList.remove('right-position')
-      row.children[i].classList.remove('wrong-position')
-      row.children[i].innerHTML = '';
-    }
-    row.classList.remove('submitted');
-  })
-  document.querySelectorAll('.key').forEach(key=>{
-    key.classList.remove('key-in-word');
-  })
-  console.log(target_word)
-}
+// const replayGame = () => {
+//   target_word = valid_answers[Math.floor(Math.random()*valid_answers.length)]
+//   guess = 1;
+//   tile = 1;
+//   current_guess = '';
+//   banner.classList.add('hidden');
+//   rows.forEach(row=>{
+//     for (let i = 0; i < 5; i++) {
+//       row.children[i].classList.remove('right-position')
+//       row.children[i].classList.remove('wrong-position')
+//       row.children[i].innerHTML = '';
+//     }
+//     row.classList.remove('submitted');
+//   })
+//   document.querySelectorAll('.key').forEach(key=>{
+//     key.classList.remove('key-in-word');
+//   })
+//   console.log(target_word)
+//
+// }
 
 const resetGame = () => {
   setUp();
+  updateNextLetter();
   // clearInterval(timed_loop);
   document.querySelectorAll('#tiles .space').forEach(space => {
     space.innerHTML = '';
@@ -240,15 +190,34 @@ const animateButton = (dom) => {
 }
 
 const leftTrigger = () => {
-  console.log('L')
+  // console.log('L')
   letter_in_play ? changeColumn(column-1) : changePreColumn(pre_column-1);
   animateButton(left_button)
 }
 const rightTrigger = () => {
-  console.log('R')
+  // console.log('R')
   letter_in_play ? changeColumn(column+1) : changePreColumn(pre_column+1);
   animateButton(right_button)
 }
+const downTrigger = () => {
+  console.log('D')
+  if (game_over) {
+    return;
+  }
+
+
+  // console.log('drop letter')
+  if (!fast_drop_mode_on) {
+    clearInterval(gamePlayLoop)
+    gamePlay();
+    gamePlayLoop = setInterval(gamePlay, speed*25) // double speed
+    fast_drop_mode_on = true;
+  }
+
+
+  // animateButton(down_button)
+}
+let fast_drop_mode_on = false;
 
 const left_button = document.querySelector('#left');
 const right_button = document.querySelector('#right');
@@ -263,8 +232,25 @@ const keyboardPress = () => {
   else if (event.code === 'ArrowRight' || event.code === 'KeyD') {
     rightTrigger();
   }
+  else if (event.code === 'ArrowDown' || event.code === 'KeyS') {
+    window.addEventListener('keyup', keyboardRelease);
+    downTrigger();
+  }
+}
+const keyboardRelease = () => {
+  if (event.code === 'ArrowDown' || event.code === 'KeyS') {
+    console.log('fast mode off')
+    window.removeEventListener('keyup', keyboardRelease);
+    clearInterval(gamePlayLoop)
+    if (!game_over) {
+      gamePlayLoop = setInterval(gamePlay, speed*100)
+    }
+    fast_drop_mode_on = false;
+  }
 }
 window.addEventListener('keydown', keyboardPress);
+
+
 
 // button gameplay
 
@@ -292,6 +278,7 @@ const triggerRowEnd = (row) => {
   if (Array.from(rows[row].children).every((child)=>{
     return child.classList.contains('right-position')
   })) {
+    game_over = true;
     gameWon();
   } else if (goes === 30) {
     gameLost();
@@ -307,7 +294,7 @@ const resetPreColumn = () => {
 const checkAndDrop = (column) => {
 
   row++;
-  console.log(row, column)
+  // console.log(row, column)
   if (row === 0 && rows[row].children[column].innerHTML !== '') {
     gameLost();
     return;
@@ -332,7 +319,7 @@ const changeColumn = (col) => {
   if (game_over) {
     return;
   }
-  console.log(column, col)
+  // console.log(column, col)
   // let target_empty = rows[row].children[col].innerHTML === '' ? true : false;
 
   // if (col >= 0 && col < 5 && target_empty) {
@@ -355,7 +342,7 @@ const changePreColumn = (col) => {
 }
 
 const gamePlay = () => {
-  console.log('loop')
+  // console.log('loop')
   if (!letter_in_play) {
     // selectColumn(2);
     letter = next_letter;
