@@ -109,6 +109,10 @@ const gameWon = () => {
   banner_message.innerHTML = '<div>YOU</div><div>WIN!</div>';
   setTimeout(()=>{banner.classList.remove('hidden');},1500)
   rows[row-1].classList.add('winning-row');
+  let target_row = rows[row-1];
+  // setTimeout(()=>{target_row.classList.remove('winning-row');},1000)
+  setTimeout(()=>{target_row.classList.add('with-delay');},600)
+  // setTimeout(()=>{target_row.classList.add('winning-row');},1001)
   game_over = true;
   // banner_goes.innerHTML = (guess) + ' guess' + (guess > 2 ? 'es' : '');
   clearInterval(gamePlayLoop)
