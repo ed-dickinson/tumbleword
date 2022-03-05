@@ -371,3 +371,10 @@ let gamePlayLoop;
 setTimeout(()=> {
   gamePlayLoop = setInterval(gamePlay, speed*100);
 },1800)
+
+
+// disable double tap
+document.addEventListener("click", event => {
+  event.preventDefault()
+  event.stopPropagation()
+})
