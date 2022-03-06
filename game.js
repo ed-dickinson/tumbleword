@@ -241,18 +241,35 @@ const keyboardPress = () => {
     downTrigger();
   }
 }
+const untriggerDrop = () => {
+  console.log('fast mode off')
+  window.removeEventListener('keyup', keyboardRelease);
+  clearInterval(gamePlayLoop)
+  if (!game_over) {
+    gamePlayLoop = setInterval(gamePlay, speed*100)
+  }
+  fast_drop_mode_on = false;
+}
 const keyboardRelease = () => {
   if (event.code === 'ArrowDown' || event.code === 'KeyS') {
-    console.log('fast mode off')
-    window.removeEventListener('keyup', keyboardRelease);
-    clearInterval(gamePlayLoop)
-    if (!game_over) {
-      gamePlayLoop = setInterval(gamePlay, speed*100)
-    }
-    fast_drop_mode_on = false;
+    untriggerDrop();
   }
 }
 window.addEventListener('keydown', keyboardPress);
+
+let mobile_drop_triggered = false;
+
+const touchDrop = () => {
+
+  console.log('touch drop!')
+  if (letter_in_play) {
+    downTrigger();
+    mobile_drop_triggered = true;
+  }
+
+}
+
+tiles_container.addEventListener('click', touchDrop);
 
 
 
@@ -278,6 +295,10 @@ const triggerRowEnd = (row) => {
     console.log(all_letters)
   }
 
+  if (mobile_drop_triggered) {
+    untriggerDrop();
+    mobile_drop_triggered = false;
+  }
 
   if (Array.from(rows[row].children).every((child)=>{
     return child.classList.contains('right-position')
@@ -364,6 +385,8 @@ const gamePlay = () => {
   }
    // drops a letter
 }
+
+
 
 let gamePlayLoop;
 
