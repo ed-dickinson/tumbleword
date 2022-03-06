@@ -1,4 +1,6 @@
 
+//holding drop and clearing row doesnt allow pause to take effect
+
 // do reply button
 
 
@@ -42,7 +44,8 @@ const banner_message = document.querySelector('#message');
 const banner_goes = document.querySelector('#goes');
 
 const dom = {
-  next_letter: document.querySelector('#next-letter')
+  next_letter: document.querySelector('#next-letter'),
+  score: document.querySelector('#score')
 }
 
 const tiles_container = document.querySelector('#tiles')
@@ -278,9 +281,98 @@ tiles_container.addEventListener('click', touchDrop);
 let letter, column, row;
 let pre_column = 2;
 let speed = 5;
+let level = 0;
 
 let game_over = false;
 let letter_in_play = false;
+
+
+let used_words = [];
+
+const setNewWord = () => {
+  used_words.push(target_word)
+  target_word = valid_answers[Math.floor(Math.random()*valid_answers.length)]
+}
+
+const removeLetterClasses = (dom) => {
+  dom.classList.remove('right-position')
+  dom.classList.remove('wrong-position')
+  dom.classList.remove('wrong-letter')
+}
+
+const clearRow = (r) => {
+  console.log(r)
+
+  rows[r].classList.add('cleared-row');
+  let target_row = rows[r];
+  setTimeout(()=>{target_row.classList.remove('cleared-row');},500)
+  // pause();
+  clearInterval(gamePlayLoop)
+  let rows_to_clear = 6 - r;
+  let delay = 500;
+  let board_2d_array = [];
+  for (let j = 0; j < 6 - rows_to_clear; j++) {
+    let temp_array = []
+    Array.from(rows[r - j - 1].children).forEach(box=>{
+      // box.innerHTML = rows[r - j - 1].children[rows[r-j].children.indexOf(box)]
+      temp_array.push({letter: box.innerHTML, class: box.className.split(' ')})
+      board_2d_array[r-j-1] = temp_array;
+    })
+  }
+  
+  for (let i = 0; i < rows_to_clear; i++) { // each row cleared = r + i
+    let iter = 0;
+    Array.from(rows[r + i].children).forEach(box=>{
+      setTimeout(()=>{
+        box.innerHTML = ''
+        box.classList.remove('right-position')
+        box.classList.remove('wrong-position')
+        box.classList.remove('wrong-letter')
+      },delay + (i*500) + (iter*100))
+      // for each cleared row (going down), set a timeout for each row (going up) to copy the row above it
+      iter++;
+    })
+
+
+    setTimeout(()=>{
+      for (let j = 0; j < 6 - rows_to_clear; j++) {
+        // let rr = 5 - j - rows_to_clear
+        // rows[rr]
+        let box_it = 0;
+        Array.from(rows[r - j + i].children).forEach(box=>{
+          removeLetterClasses(rows[r-j+i].children[box_it])
+          box.innerHTML = board_2d_array[r-j-1][box_it].letter
+          if (board_2d_array[r-j-1][box_it].class.length > 1) {
+            box.classList.add(board_2d_array[r-j-1][box_it].class[1])
+          }
+          box_it++;
+        })
+
+
+        // board_2d_array.push(temp_array);
+
+      }
+    },1000 + (rows_to_clear*500) + (i*200))
+    console.log(board_2d_array)
+    // rows[r + i]
+  }
+  // for (let i = r-1; i > 0; i--) {
+  //   let row_array = [];
+  //   let it = 0;
+  //   Array.from(rows[i].children).forEach(box=>{
+  //     row_array.push(box.innerHTML)
+  //     rows[i+1].children[it].innerHTML = box.innerHTMLdd
+  //     it++;
+  //   })
+  // }
+  // setTimeout(resume,daelay+(rows_to_clear*500));
+
+}
+
+const increaseLevel = () => {
+  console.log('increase LVL:', level, '>',level+1)
+  level++;
+}
 
 const triggerRowEnd = (row) => {
 
@@ -303,10 +395,13 @@ const triggerRowEnd = (row) => {
   if (Array.from(rows[row].children).every((child)=>{
     return child.classList.contains('right-position')
   })) {
-    game_over = true;
-    gameWon();
-  } else if (goes === 30) {
-    gameLost();
+    // game_over = true;
+    // gameWon();
+
+    clearRow(row);
+    increaseLevel();
+  // } else if (goes === 30) {
+  //   gameLost();
   }
 }
 
@@ -386,15 +481,30 @@ const gamePlay = () => {
    // drops a letter
 }
 
+const pause = () => {
+  clearInterval(gamePlayLoop)
+}
 
+const resume = () => {
+  gamePlayLoop = setInterval(gamePlay, speed*100);
+}
+
+
+let intro_on = true;
+intro_on = false;
 
 let gamePlayLoop;
 
 // account for intro delay
 setTimeout(()=> {
   gamePlayLoop = setInterval(gamePlay, speed*100);
-},1800)
+},intro_on ? 1800 : 0)
 
+// if (!intro_on) {
+//   title_holder.style.display = 'none'
+// }
+
+!intro_on ? title_holder.style.display = 'none' : ''
 
 // disable double tap
 document.addEventListener("click", event => {

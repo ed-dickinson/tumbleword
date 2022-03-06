@@ -143,6 +143,10 @@ header span#next-letter {
   to {border-color: grey;}
 }
 
+#tiles .cleared-row .space {
+  animation: winningrow 0.5s infinite linear;
+}
+
 
 #banner {
   /* width: 100%;
@@ -268,4 +272,44 @@ header span#next-letter {
   display: inline-block;
   position: relative;
   color: gold;
+}
+
+#tumbleweed-cont {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%);
+}
+
+#tumbleweed {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  animation: tumble-round 4s infinite linear, tumble-bounce 1s infinite ease-in alternate, tumble-across 4s infinite linear;
+}
+
+@keyframes tumble-round {
+  from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+@keyframes tumble-bounce {
+  from {top: 1em;}
+    to {top: 2em;}
+}
+@keyframes tumble-across {
+  0% {left: -10em; opacity: 0;}
+  50% {left: 0; opacity: 1;}
+    100% {left: 10em; opacity: 0;}
+}
+
+#tumbleweed div {
+  position: absolute;
+}
+
+
+#score {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.75em;
 }
