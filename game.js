@@ -1,6 +1,9 @@
 
 //holding drop and clearing row doesnt allow pause to take effect
 
+// from tetris
+const level_speeds = [1,0.793,0.6178,0.4727,0.3551,0.262,0.1896,0.1348,0.0939,0.0642]
+
 // do reply button
 
 
@@ -175,6 +178,8 @@ const resetGame = () => {
   letter_in_play = false;
 
   goes = 0;
+  level = 0;
+  setSpeed();
 
   gamePlayLoop = setInterval(gamePlay, speed*100);
 }
@@ -280,8 +285,13 @@ tiles_container.addEventListener('click', touchDrop);
 
 let letter, column, row;
 let pre_column = 2;
-let speed = 5;
+// let speed = 5;
+
 let level = 0;
+let speed = 10;
+const setSpeed = () => {
+  speed = level_speeds[level]*10;
+}
 
 let game_over = false;
 let letter_in_play = false;
@@ -319,7 +329,7 @@ const clearRow = (r) => {
       board_2d_array[r-j-1] = temp_array;
     })
   }
-  
+
   for (let i = 0; i < rows_to_clear; i++) { // each row cleared = r + i
     let iter = 0;
     Array.from(rows[r + i].children).forEach(box=>{
@@ -353,9 +363,10 @@ const clearRow = (r) => {
 
       }
     },1000 + (rows_to_clear*500) + (i*200))
-    console.log(board_2d_array)
+    // console.log(board_2d_array)
     // rows[r + i]
   }
+  setTimeout(resume,1000 + (rows_to_clear*500) + (rows_to_clear*200))
   // for (let i = r-1; i > 0; i--) {
   //   let row_array = [];
   //   let it = 0;
@@ -372,6 +383,7 @@ const clearRow = (r) => {
 const increaseLevel = () => {
   console.log('increase LVL:', level, '>',level+1)
   level++;
+
 }
 
 const triggerRowEnd = (row) => {
@@ -399,7 +411,9 @@ const triggerRowEnd = (row) => {
     // gameWon();
 
     clearRow(row);
+    setNewWord();
     increaseLevel();
+    setSpeed();
   // } else if (goes === 30) {
   //   gameLost();
   }
