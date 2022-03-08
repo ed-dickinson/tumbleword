@@ -1,13 +1,11 @@
 
 //holding drop and clearing row doesnt allow pause to take effect
 
-// wrong letters dropping after clear!
-// needs re-classing
+// 1 wrong letter dropping after clear! more?
 
 // from tetris
 const level_speeds = [1,0.793,0.6178,0.4727,0.3551,0.262,0.1896,0.1348,0.0939,0.0642]
 // maybe just change this to level timesing by 0.8?
-
                     //        0.779, 0.765, 0.7512
 
 // do reply button
@@ -324,6 +322,26 @@ const removeLetterClasses = (dom) => {
   dom.classList.remove('wrong-letter')
 }
 
+const reanalyseClasses = () => {
+
+  tiles.forEach(node=>{
+    let i = Array.from(tiles).indexOf(node)
+    let col = i % 6
+    node.classList.remove('right-position')
+    node.classList.remove('wrong-position')
+    node.classList.remove('wrong-letter')
+    if (node.innerHTML !== '') {
+      if (node.innerHTML === target_word_array[col]) {
+        node.classList.add('right-position');
+      } else if (target_word.includes(node.innerHTML)) {
+        node.classList.add('wrong-position');
+      } else {
+        node.classList.add('wrong-letter');
+      }
+    }
+  })
+}
+
 const clearRow = (r) => {
   console.log(r)
 
@@ -380,7 +398,8 @@ const clearRow = (r) => {
     // console.log(board_2d_array)
     // rows[r + i]
   }
-  setTimeout(resume,1000 + (rows_to_clear*500) + (rows_to_clear*200))
+  setTimeout(reanalyseClasses,1000 + (rows_to_clear*500) + (rows_to_clear*200))
+  setTimeout(resume,1000 + (rows_to_clear*500) + (rows_to_clear*200) + 500)
   // for (let i = r-1; i > 0; i--) {
   //   let row_array = [];
   //   let it = 0;
