@@ -1,8 +1,14 @@
 
 //holding drop and clearing row doesnt allow pause to take effect
 
+// wrong letters dropping after clear!
+// needs re-classing
+
 // from tetris
 const level_speeds = [1,0.793,0.6178,0.4727,0.3551,0.262,0.1896,0.1348,0.0939,0.0642]
+// maybe just change this to level timesing by 0.8?
+
+                    //        0.779, 0.765, 0.7512
 
 // do reply button
 
@@ -40,6 +46,29 @@ const setUp = () => {
 setUp();
 
 console.log(all_letters)
+
+let letter_iterator = [];
+let max_letters_without_new_line = 3;
+
+const resetLetterIterator = () => {
+  let array = target_word.split('');
+  array.forEach(letter => {
+    for (let i = 0; i < max_letters_without_new_line; i++) {
+      letter_iterator.push(letter);
+    }
+  })
+}
+
+const shuffleLetterIterator = () => {
+  for (let i = letter_iterator.length -1; i > 0; i--) {
+    let j = Math.floor(Math.random() * i)
+    let k = letter_iterator[i]
+    letter_iterator[i] = letter_iterator[j]
+    letter_iterator[j] = k
+  }
+}
+
+resetLetterIterator()
 
 
 const banner = document.querySelector('#banner');
@@ -83,8 +112,12 @@ const updateNextLetter = () => {
   let current_letter = next_letter;
   last_letter = next_letter;
   do {
-    // next_letter = target_word_array[Math.floor(Math.random()*5)];
-    next_letter = all_letters[Math.floor(Math.random()*all_letters.length)];
+    // next_letter = all_letters[Math.floor(Math.random()*all_letters.length)];
+    if (letter_iterator.length === 0) {
+      resetLetterIterator();
+    }
+    shuffleLetterIterator();
+    next_letter = letter_iterator.pop();
   } while (next_letter === current_letter);
 
 
@@ -137,26 +170,6 @@ const gameLost = () => {
 let guess = 1;
 let tile = 1;
 
-// const replayGame = () => {
-//   target_word = valid_answers[Math.floor(Math.random()*valid_answers.length)]
-//   guess = 1;
-//   tile = 1;
-//   current_guess = '';
-//   banner.classList.add('hidden');
-//   rows.forEach(row=>{
-//     for (let i = 0; i < 5; i++) {
-//       row.children[i].classList.remove('right-position')
-//       row.children[i].classList.remove('wrong-position')
-//       row.children[i].innerHTML = '';
-//     }
-//     row.classList.remove('submitted');
-//   })
-//   document.querySelectorAll('.key').forEach(key=>{
-//     key.classList.remove('key-in-word');
-//   })
-//   console.log(target_word)
-//
-// }
 
 const resetGame = () => {
   setUp();
@@ -302,6 +315,7 @@ let used_words = [];
 const setNewWord = () => {
   used_words.push(target_word)
   target_word = valid_answers[Math.floor(Math.random()*valid_answers.length)]
+  target_word_array = target_word.split('');
 }
 
 const removeLetterClasses = (dom) => {
@@ -412,6 +426,7 @@ const triggerRowEnd = (row) => {
 
     clearRow(row);
     setNewWord();
+    resetLetterIterator()
     increaseLevel();
     setSpeed();
   // } else if (goes === 30) {
