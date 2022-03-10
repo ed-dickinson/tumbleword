@@ -238,7 +238,7 @@ const rightTrigger = () => {
 }
 const downTrigger = () => {
   // console.log('D')
-  if (game_over) {
+  if (game_over || busy) {
     return;
   }
 
@@ -319,7 +319,7 @@ const setSpeed = () => {
 
 let game_over = false;
 let letter_in_play = false;
-
+let busy;
 
 let used_words = [];
 
@@ -366,6 +366,7 @@ const clearRow = (r) => {
   setTimeout(()=>{target_row.classList.remove('cleared-row');},500)
   // pause();
   clearInterval(gamePlayLoop)
+  busy = true;
   let rows_to_clear = 6 - r;
   let delay = 500;
   let board_2d_array = [];
@@ -412,13 +413,13 @@ const clearRow = (r) => {
           box.innerHTML = '';
         })
       }
-    },1000 + (rows_to_clear*500) + (i*200))
+    },delay + (rows_to_clear*500) + (i*200))
     // i think this 1000 ^^^ is the delay between clear and row drop
   }
   //sets timeout to rejig sqaure colours
-  setTimeout(reanalyseClasses,1000 + (rows_to_clear*500) + (rows_to_clear*200))
-  setTimeout(updateNextLetter,1000 + (rows_to_clear*500) + (rows_to_clear*200))
-  setTimeout(resume,1000 + (rows_to_clear*500) + (rows_to_clear*200) + 500)
+  setTimeout(reanalyseClasses,delay + (rows_to_clear*500) + (rows_to_clear*200))
+  setTimeout(updateNextLetter,delay + (rows_to_clear*500) + (rows_to_clear*200))
+  setTimeout(resume,delay + (rows_to_clear*500) + (rows_to_clear*200) + 500)
   // for (let i = r-1; i > 0; i--) {
   //   let row_array = [];
   //   let it = 0;
@@ -554,6 +555,7 @@ const pause = () => {
 
 const resume = () => {
   gamePlayLoop = setInterval(gamePlay, speed*100);
+  busy = false;
 }
 
 
