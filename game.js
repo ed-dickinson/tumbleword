@@ -79,7 +79,7 @@ resetLetterIterator()
 const banner = document.querySelector('#banner');
 const banner_message = document.querySelector('#message');
 const banner_goes = document.querySelector('#goes');
-const banner_result = document.querySelector('#result .score-display');
+const banner_result = document.querySelector('#result');
 
 const dom = {
   next_letter: document.querySelector('#next-letter'),
@@ -170,7 +170,7 @@ const gameLost = () => {
   banner.classList.remove('hidden')
   banner_message.innerHTML = '<div>GAME</div><div>OVER</div>';
   // banner_goes.innerHTML = (guess-1) + ' guess' + (guess > 2 ? 'es' : '');
-  banner_result.innerHTML = level;
+  banner_result.innerHTML = `You got ${level} word${level===1?'':'s'}!`;
   game_over = true;
   clearInterval(gamePlayLoop)
 }
@@ -182,6 +182,7 @@ let tile = 1;
 
 const resetGame = () => {
   setUp();
+  resetLetterIterator();
   updateNextLetter();
   // clearInterval(timed_loop);
   document.querySelectorAll('#tiles .space').forEach(space => {
@@ -304,7 +305,6 @@ const touchDrop = () => {
 tiles_container.addEventListener('click', touchDrop);
 
 
-
 // button gameplay
 
 let letter, column, row;
@@ -387,15 +387,15 @@ const clearRow = (r) => {
         box.classList.remove('wrong-position')
         box.classList.remove('wrong-letter')
       },delay + (i*500) + (iter*100))
-      // for each cleared row (going down), set a timeout for each row (going up) to copy the row above it
+
       iter++;
     })
 
-
+    // for each cleared row (going down), set a timeout to copy the row above it
     setTimeout(()=>{
       for (let j = 0; j < 6 - rows_to_clear; j++) {
-        // let rr = 5 - j - rows_to_clear
-        // rows[rr]
+
+        // drops rows
         let box_it = 0;
         Array.from(rows[r - j + i].children).forEach(box=>{
           removeLetterClasses(rows[r-j+i].children[box_it])
@@ -406,18 +406,16 @@ const clearRow = (r) => {
           box_it++;
         })
 
-
-        // board_2d_array.push(temp_array);
+        // clears final row (top)
         Array.from(rows[0].children).forEach(box=>{
           removeLetterClasses(box)
           box.innerHTML = '';
         })
       }
-      // and clear first row
     },1000 + (rows_to_clear*500) + (i*200))
-    // console.log(board_2d_array)
-    // rows[r + i]
+    // i think this 1000 ^^^ is the delay between clear and row drop
   }
+  //sets timeout to rejig sqaure colours
   setTimeout(reanalyseClasses,1000 + (rows_to_clear*500) + (rows_to_clear*200))
   setTimeout(updateNextLetter,1000 + (rows_to_clear*500) + (rows_to_clear*200))
   setTimeout(resume,1000 + (rows_to_clear*500) + (rows_to_clear*200) + 500)
