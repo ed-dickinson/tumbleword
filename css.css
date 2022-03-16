@@ -87,6 +87,9 @@ header span#next-letter {
 #tiles .space.unloaded {
   border-color: white;
 }
+#tiles.clearing .space {
+  color: white;
+}
 
 #tiles .row {
   height: 2em;
@@ -207,7 +210,7 @@ header span#next-letter {
 }
 #banner #message {
   font-size: 1.5em;
-  font-size: 2.5em;
+  font-size: 2.25em;
 }
 #banner #message div:first-of-type {
   animation: text-shadow 1s infinite alternate -2.5s;
@@ -232,7 +235,7 @@ header span#next-letter {
   color: black !important;
   font-size: 0.8em;
   font-weight: 600;
-  margin-top: 0.5em;
+  margin-top: 0.75em;
 
 }
 
@@ -240,7 +243,7 @@ header span#next-letter {
   font-weight: 800;
   font-size: 1.5em;
   position: relative;
-  top: 5px;
+  top: 0.25em;
   color: var(--gry);
   font-weight: 900;
   /* font-size: 2dm */
