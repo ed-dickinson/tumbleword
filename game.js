@@ -93,6 +93,7 @@ for (let i = 0; i < 6; i++) {
   for (let j = 0; j < 5; j++) {
     let space = document.createElement('span');
     space.classList.add('space')
+    space.classList.add('unloaded')
     row.appendChild(space)
   }
 }
@@ -248,7 +249,6 @@ const keyboardPress = () => {
     rightTrigger();
   }
   else if (event.code === 'ArrowDown' || event.code === 'KeyS') {
-    window.addEventListener('keyup', keyboardRelease);
     downTrigger();
   }
 }
