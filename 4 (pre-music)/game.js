@@ -227,7 +227,6 @@ const downTrigger = () => {
     let sss = level===0 ? 20 : 25;
     gamePlayLoop = setInterval(gamePlay, speed*sss) // double speed
     fast_drop_mode_on = true;
-    music.changeTempo(speed*sss)
   }
 
 }
@@ -248,7 +247,6 @@ const keyboardPress = () => {
     rightTrigger();
   }
   else if (event.code === 'ArrowDown' || event.code === 'KeyS') {
-    // downTrigger();
     touchDrop();
   }
 }
@@ -294,7 +292,6 @@ const setSpeed = () => {
   } else {
     speed *= 0.8;
   }
-  music.changeTempo(speed);
   // speed = level_speeds[level]*10;
 }
 
@@ -412,13 +409,10 @@ const increaseLevel = () => {
 
 const triggerRowEnd = (row) => {
 
-  let right_position;
   if (letter === target_word_array[column]) {
     rows[row].children[column].classList.add('right-position');
-    right_position = true;
   } else if (target_word.includes(letter)) {
     rows[row].children[column].classList.add('wrong-position');
-    right_position = false;
   } else {
     rows[row].children[column].classList.add('wrong-letter');
   }
@@ -426,21 +420,16 @@ const triggerRowEnd = (row) => {
   if (mobile_drop_triggered) {
     untriggerDrop();
     mobile_drop_triggered = false;
-    music.changeTempo(speed);
   }
-
 
   if (Array.from(rows[row].children).every((child)=>{
     return child.classList.contains('right-position')
   })) {
-    music.rowClear(column, row);
     clearRow(row);
     setNewWord();
     resetLetterIterator()
     increaseLevel();
     setSpeed();
-  } else {
-    music.rowEnd(column, row, right_position);
   }
 }
 
@@ -462,16 +451,10 @@ const checkAndDrop = (column) => {
     if (row > 0) {
       rows[row-1].children[column].innerHTML = '';
     }
-
-    music.rowDrop(column, row);
   } else {
     triggerRowEnd(row-1);
 
     letter_in_play = false;
-
-    // music.rowDrop(column, row);
-    // music.rowEnd(column, row);
-
     row = -1;
   }
 }
@@ -557,8 +540,4 @@ dom.start.addEventListener('click', ()=>{
   hideTitle();
   dom.intro_banner.classList.add('hidden');
 
-  music.init();
-  // music.start();
-  // music.rowDrop(2, 0);
-  music.rowDrop(2, -1);
 })
