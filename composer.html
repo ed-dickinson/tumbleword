@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<title>Wordle Tetris!</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="wordle, tetris">
+<meta name="description" content="Is it Tetris? No. Is it Wordle? No. It's Tumbleword!">
+<meta name="author" content="Ed Dickinson">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="icon" href="">
+<link rel="stylesheet" type="text/css" href="css.css"/>
+<style>
+  .step {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .column {
+    width: 1em;
+    display: inline-block;
+  }
+  .header {
+    width: 5em;
+    text-align: right;
+    display: inline-block;
+    position: relative;
+    right: 4em;
+    cursor: pointer;
+  }
+  .playhead {
+    background-color: gold;
+  }
+</style>
+
+</head>
+<body>
+  <main>
+    <header>
+
+      <span id="next-letter">#</span>
+      <span id="intro-title">Composer!</span>
+      <div id="score">
+        #
+      </div>
+    </header>
+    <div id="grid">
+
+      </div>
+      <div id="controls">
+        <button id="start">START</button>
+        </div>
+</main>
+<script src="assets/Tone.js"></script>
+
+<!-- <script src="music.js"></script> -->
+
+
+
+<script>
+  const synth = new Tone.FMSynth().toMaster()
+
+  synth.volume.value = 0
+
+  Tone.Transport.bpm.value = 60;
+
+  Tone.Transport.start();
+  Tone.start();
+
+
+const grid = document.querySelector('#grid')
+
+let notes = ['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4']
+
+const toggleStep = (beat, note, dom) => {
+  console.log(beat,note, dom)
+  if (dom.innerHTML === '-') {
+    dom.innerHTML = 'o'
+  } else {
+    dom.innerHTML = '-'
+  }
+}
+
+const toggleSharp = (note) => {
+  let oct = note.slice(-1)
+  let not = note.slice(0, 1)
+
+  return not + (note.length === 2 ? '#' : '') + parseInt(oct)
+}
+
+const toggleNote = (j) => {
+  notes[7-j] = toggleSharp(notes[7-j])
+  headers[j].innerHTML = notes[7-j] + ' :'
+}
+
+let steps = []
+let headers = []
+
+for (let i = 0; i < 17; i++) {
+  let step = document.createElement('span');
+  grid.appendChild(step);
+  step.classList.add('column')
+
+  if (i===0) {
+    for (let j = 0; j < 8; j++) {
+
+      let header = document.createElement('span');
+      step.appendChild(header)
+      header.innerHTML = notes[7-j] + ' :'
+      header.classList.add('header')
+      header.addEventListener('click',()=>{
+        toggleNote(j)
+      })
+      headers.push(header)
+    }
+  } else {
+    steps.push(step)
+    for (let j = 0; j < 8; j++) {
+
+      let row = document.createElement('span');
+      step.appendChild(row)
+      row.innerHTML = '-'
+      row.classList.add('step')
+      row.addEventListener('click',()=>{
+        toggleStep(i-1, j, row);
+      })
+    }
+
+  }
+
+}
+
+
+
+let beat = 1;
+
+const progress = () => {
+  steps[beat-1].classList.remove('playhead')
+  beat++;
+  if (beat === 17) {
+    beat = 1;
+  }
+
+  steps[beat-1].classList.add('playhead')
+
+  let now = Tone.now();
+
+  Array.from(steps[beat-1].children).forEach(child=>{
+    // console.log(child)
+    let i = Array.from(steps[beat-1].children).indexOf(child)
+    if (child.innerHTML !== '-') {
+      synth.triggerAttackRelease(notes[7-i], '16n', now);
+    }
+  })
+
+}
+
+let playing = setInterval(progress, 250);
+</script>
+
+
+</body>
+</html>
