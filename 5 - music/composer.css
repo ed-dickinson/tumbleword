@@ -1,0 +1,24 @@
+#composer #grid {
+  font-family: monospace;
+}
+.step {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  cursor: pointer;
+}
+.column {
+  width: 1em;
+  display: inline-block;
+}
+.header {
+  width: 5em;
+  text-align: right;
+  display: inline-block;
+  position: relative;
+  right: 4em;
+  cursor: pointer;
+}
+.playhead {
+  background-color: gold;
+}
