@@ -159,7 +159,16 @@ const gameLost = () => {
   console.log('you lose...')
   banner.classList.remove('hidden')
   banner_message.innerHTML = '<div>GAME</div><div>OVER</div>';
+
+console.log(leaderboard)
+  let high_score = (points > leaderboard[leaderboard.length-1].points) ? true : false;
+
   banner_result.innerHTML = `You got ${level===0?'no':level} word${level===1?'':'s'}, <br>${points} points, <br> ${level>0?'but':'and'} didn't get<br /><span class="word-display">${target_word.toUpperCase()}</span>`;
+
+  if (high_score) {
+    banner_result.innerHTML += `<br>You got a high score!<br><button id="leaderboard-button">Leaderboard</button>`
+  }
+
 
   game_over = true;
   clearInterval(gamePlayLoop)

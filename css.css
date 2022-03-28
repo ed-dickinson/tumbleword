@@ -576,3 +576,39 @@ button#reset {
 #points {
   left: 0;
 }
+
+
+
+/* LEADERBOARD */
+
+#leaderboard {
+  position: absolute;
+  left: 0;
+  top: 40px;
+}
+
+#leaderboard-button {
+  background-color: var(--gry);
+  color: white;
+  border-radius: 5px;
+  text-transform: uppercase;
+  padding: 0.25em 0.5em;
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 0.25em;
+  margin-bottom: 0em;
+  cursor: pointer;
+  border: 0;
+}
+
+#leaderboard tr td:first-of-type {
+  text-align: right;
+}
+#leaderboard tr td:nth-of-type(2) {
+  text-align: right;
+  font-weight: 700;
+  /* padding-left: 0.5em; */
+}
+#leaderboard tr td:nth-of-type(3) {
+  text-align: left;
+}
