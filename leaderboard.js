@@ -32,6 +32,7 @@ const domain = 'https://tumbleword-leaderboard.herokuapp.com'
 
 const fillLeaderboard = (scores) => {
   let parent = document.querySelector('#leaderboard #scores')
+  parent.innerHTML = ''
   scores.forEach(score => {
     let child = document.createElement('tr')
     child.innerHTML = `<td>${score.name} -</td> <td>${score.words}</td> / <td>${score.points}</td>`
@@ -57,8 +58,19 @@ const postScore = (score) => {
   post(domain + '/add_score', score)
     .then(response => {
       console.log('Success, scored added: ', response)
+      getLeaderboard()
     })
     .catch(e => console.log(e))
 }
 
-let test_score = {name: '', words: 0, points: 10}
+// let test_score = {name: '', words: 0, points: 10}
+
+dom.show_leaderboard.addEventListener('click', () => {
+  dom.leaderboard.classList.remove('hidden')
+  dom.banner.classList.add('hidden')
+})
+
+dom.leaderboard_close_button.addEventListener('click', () => {
+  dom.banner.classList.remove('hidden')
+  dom.leaderboard.classList.add('hidden')
+});

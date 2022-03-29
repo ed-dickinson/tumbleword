@@ -76,13 +76,17 @@ const dom = {
   score: document.querySelector('#score'),
   start: document.querySelector('#big-start'),
   restart: document.querySelector('#big-restart'),
+  banner: document.querySelector('#banner'),
   intro_banner: document.querySelector('#intro-banner'),
   banner_close_button: document.querySelector('#banner-close-button'),
   tiles: document.querySelector('#tiles'),
   points: document.querySelector('#points'),
   share: document.querySelector('#share'),
   share_readout: document.querySelector('#share-readout'),
-  leaderboard: document.querySelector('#leaderboard')
+  leaderboard: document.querySelector('#leaderboard'),
+  result_leaderboard: document.querySelector('#result-leaderboard'),
+  show_leaderboard: document.querySelector('#show-leaderboard'),
+  leaderboard_close_button: document.querySelector('#leaderboard-close-button')
 }
 
 dom.banner_close_button.addEventListener('click',()=>{banner.classList.add('hidden')})
@@ -160,9 +164,11 @@ const gameLost = () => {
   console.log('you lose...')
   banner.classList.remove('hidden')
 
-
-  console.log(leaderboard)
   let high_score = (points > leaderboard[leaderboard.length-1].points) ? true : false;
+
+  // high_score = true;
+  // points = 10;
+  // words = 2;
 
   banner_message.innerHTML = high_score
     ? '<div>HIGH</div><div>SCORE!</div>'
@@ -171,20 +177,59 @@ const gameLost = () => {
   banner_result.innerHTML = `You got ${level===0?'no':level} word${level===1?'':'s'}, <br>${points} points, <br> ${level>0?'but':'and'} didn't get<br /><span class="word-display">${target_word.toUpperCase()}</span>`;
 
 
-
   if (high_score) {
     banner_result.classList.add('hidden')
-    dom.leaderboard.classList.remove('hidden')
-    banner_result.innerHTML += `<br>You got a high score!<br><button id="leaderboard-button">Leaderboard</button>`
-    // let i = 0;
-    // while (points > leaderboard[leaderboard.length-1-i].points) {
-    //   i++;
-    // }
-    // let leaderboard_copy = leaderboard
-    // leaderboard_copy.splice(i, 0, )
-    // populateLeaderboard
-    let leaderboard_popup = document.createElement('div');
-    leaderboard_popup.
+    dom.share.classList.add('hidden')
+    // dom.leaderboard.classList.remove('hidden')
+    // banner_result.innerHTML += `<br>You got a high score!<br><button id="leaderboard-button">Leaderboard</button>`
+
+    dom.result_leaderboard.innerHTML = '<div class="message">You made the leaderboard:</div>'
+
+    let leaderboard_enter = document.createElement('table');
+
+    let score_inserted = false;
+
+    for (let i = 0; i < leaderboard.length; i++) {
+      let score = leaderboard[i]
+      let row = document.createElement('tr')
+      if (points > score.points && score_inserted === false) {
+        row.innerHTML = `<td><input id="score-name" value="" placeholder="Your name..." minlength="1" maxlength="10"></input></td>- <td>${words}</td> / <td>${points}</td>`
+        score_inserted = true;
+        row.classList.add('achieved-score')
+      } else {
+        row.innerHTML = `<td>${score.name} </td>- <td>${score.words}</td> / <td>${score.points}</td>`
+      }
+
+      leaderboard_enter.appendChild(row)
+    }
+
+    dom.result_leaderboard.appendChild(leaderboard_enter)
+
+    let leaderboard_submit_button = document.createElement('button');
+    leaderboard_submit_button.innerHTML = 'SUBMIT'
+    const submitFunction = () => {
+      if (document.querySelector('#score-name').value === '') {
+        document.querySelector('#score-name').style.backgroundColor = 'var(--ylw)';
+        leaderboard_submit_button.style.left = '-5px'
+        setTimeout(()=>{leaderboard_submit_button.style.left = '5px'},100)
+        setTimeout(()=>{leaderboard_submit_button.style.left = '-5px'},200)
+        setTimeout(()=>{leaderboard_submit_button.style.left = '5px'},300)
+        setTimeout(()=>{leaderboard_submit_button.style.left = '0px'},400)
+        return;
+      }
+      postScore({
+        name: document.querySelector('#score-name').value,
+        words: words,
+        points: points
+      });
+      leaderboard_submit_button.removeEventListener('click', submitFunction)
+      dom.result_leaderboard.innerHTML = '';
+      banner_result.classList.remove('hidden')
+      dom.share.classList.remove('hidden')
+    }
+    leaderboard_submit_button.addEventListener('click', submitFunction)
+    dom.result_leaderboard.appendChild(leaderboard_submit_button)
+
   }
 
 
@@ -194,7 +239,7 @@ const gameLost = () => {
   banner.classList.add('fade-in');
   dom.restart.classList.remove('hidden');
 
-  dom.share_readout.value = `I got ${level} word${level===1?'':'s'} and ${points} points in Tumbleword! - https://ed-dickinson.net/tumbleword`
+  dom.share_readout.value = `I got ${level} word${level===1?'':'s'} and ${points} points in Tumbleword${high_score?', and made the Leaderboard':''}! - https://ed-dickinson.net/tumbleword`
   dom.share.addEventListener('click',copyShareText)
 }
 
@@ -246,6 +291,7 @@ dom.restart.addEventListener('click',()=>{
   resetGame();
   dom.restart.classList.add('hidden');
   banner.classList.remove('fade-in');
+  dom.leaderboard.add('hidden');
 })
 
 
@@ -274,6 +320,9 @@ const downTrigger = () => {
     gamePlay(); // do it once to get rid of delay in set interval
 
     let sss = level===0 ? 20 : 25;
+
+    // sss = 10; // TESTING
+
     gamePlayLoop = setInterval(gamePlay, speed*sss) // double speed
     fast_drop_mode_on = true;
   }
