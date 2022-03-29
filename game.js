@@ -164,7 +164,7 @@ const gameLost = () => {
   console.log('you lose...')
   banner.classList.remove('hidden')
 
-  let high_score = (points > leaderboard[leaderboard.length-1].points) ? true : false;
+  let high_score = (leaderboard.length && points > leaderboard[leaderboard.length-1].points) ? true : false;
 
   // high_score = true;
   // points = 10;
