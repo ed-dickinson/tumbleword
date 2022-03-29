@@ -61,4 +61,4 @@ const postScore = (score) => {
     .catch(e => console.log(e))
 }
 
-let test_object = {name: 'browser post test', words: 0, points: 0}
+let test_score = {name: '', words: 0, points: 10}

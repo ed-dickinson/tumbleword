@@ -81,7 +81,8 @@ const dom = {
   tiles: document.querySelector('#tiles'),
   points: document.querySelector('#points'),
   share: document.querySelector('#share'),
-  share_readout: document.querySelector('#share-readout')
+  share_readout: document.querySelector('#share-readout'),
+  leaderboard: document.querySelector('#leaderboard')
 }
 
 dom.banner_close_button.addEventListener('click',()=>{banner.classList.add('hidden')})
@@ -158,15 +159,32 @@ const gameWon = () => {
 const gameLost = () => {
   console.log('you lose...')
   banner.classList.remove('hidden')
-  banner_message.innerHTML = '<div>GAME</div><div>OVER</div>';
 
-console.log(leaderboard)
+
+  console.log(leaderboard)
   let high_score = (points > leaderboard[leaderboard.length-1].points) ? true : false;
+
+  banner_message.innerHTML = high_score
+    ? '<div>HIGH</div><div>SCORE!</div>'
+    : '<div>GAME</div><div>OVER</div>';
 
   banner_result.innerHTML = `You got ${level===0?'no':level} word${level===1?'':'s'}, <br>${points} points, <br> ${level>0?'but':'and'} didn't get<br /><span class="word-display">${target_word.toUpperCase()}</span>`;
 
+
+
   if (high_score) {
+    banner_result.classList.add('hidden')
+    dom.leaderboard.classList.remove('hidden')
     banner_result.innerHTML += `<br>You got a high score!<br><button id="leaderboard-button">Leaderboard</button>`
+    // let i = 0;
+    // while (points > leaderboard[leaderboard.length-1-i].points) {
+    //   i++;
+    // }
+    // let leaderboard_copy = leaderboard
+    // leaderboard_copy.splice(i, 0, )
+    // populateLeaderboard
+    let leaderboard_popup = document.createElement('div');
+    leaderboard_popup.
   }
 
 
@@ -403,7 +421,7 @@ const clearRow = (r) => {
         box.classList.remove('right-position')
         box.classList.remove('wrong-position')
         box.classList.remove('wrong-letter')
-        addPoints(10);
+        addPoints(1);
       },delay + (i*500) + (iter*100))
 
       iter++;
@@ -474,7 +492,7 @@ const triggerRowEnd = (row) => {
     resetLetterIterator()
     increaseLevel();
     setSpeed();
-    addPoints(100 + ((level-1) * 20));
+    addPoints(10 + ((level-1) * 2));
   }
 }
 

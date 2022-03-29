@@ -164,7 +164,7 @@ header span#next-letter {
   border: 2px solid var(--grn);
   padding: 1em;
   font-weight: 900;
-  text-shadow: 1px 2px 0px var(--ylw);
+  /* text-shadow: 1px 2px 0px var(--ylw); */
   z-index: 9;
   animation: border-banner 1s infinite alternate;
   border-radius: 5px;
@@ -582,9 +582,18 @@ button#reset {
 /* LEADERBOARD */
 
 #leaderboard {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
   left: 0;
-  top: 40px;
+  /* top: 40px; */
+  font-size: 0.8em;
+  background-color: white;
+  border: 2px solid var(--gry);
+  border-radius: 5px;
+}
+
+#leaderboard tr {
+  line-height: 0.8;
 }
 
 #leaderboard-button {
@@ -599,10 +608,15 @@ button#reset {
   margin-bottom: 0em;
   cursor: pointer;
   border: 0;
+  font-weight: 500;
 }
 
 #leaderboard tr td:first-of-type {
   text-align: right;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 6em;
+  overflow: hidden;
 }
 #leaderboard tr td:nth-of-type(2) {
   text-align: right;
