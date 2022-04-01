@@ -91,12 +91,18 @@ const introShimmer = () => {
     if (i === 9) {
       document.querySelector('#buttons').classList.remove('hidden');
       document.querySelector('#big-start').classList.add('loaded');
+      setTimeout(()=>{
+        if (!game_over) {
+          document.querySelector('#start-leaderboard').classList.remove('hidden');
+        }
+      },800)
     }
 
     if (i > 10) {
 
       // document.querySelector('#big-start').style.backgroundColor = 'grey';
       clearInterval(intro_shimmer)
+
 
       // setTimeout(()=>{intro_banner})
     }
