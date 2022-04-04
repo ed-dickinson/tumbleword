@@ -184,11 +184,14 @@ const gameLost = () => {
       let score = leaderboard[i]
       let row = document.createElement('tr')
       if (points > score.points && score_inserted === false) {
-        row.innerHTML = `<td><input id="score-name" value="" placeholder="Your name..." minlength="1" maxlength="10"></input></td>- <td>${words}</td><td>(${points})</td>`
+        // row.innerHTML = `<td><input id="score-name" value="" placeholder="Your name..." minlength="1" maxlength="10"></input></td>- <td>${words}</td><td>(${points})</td>`
+        row.innerHTML = `<td><input id="score-name" value="" placeholder="Your name..." minlength="1" maxlength="10"></input></td>- <td>${words}</td><td>word${words===1?'':'s'}</td>`
         score_inserted = true;
         row.classList.add('achieved-score')
       } else {
-        row.innerHTML = `<td>${score.name} </td>- <td>${score.words}</td><td>(${score.points})</td>`
+        // row.innerHTML = `<td>${score.name} </td>- <td>${score.words}</td><td>(${score.points})</td>`
+        score.name = rudeWordReplacer(score.name)
+        row.innerHTML = `<td>${score.name} </td>- <td>${score.words}</td><td>word${score.words===1?'':'s'}</td>`
       }
 
       leaderboard_enter.appendChild(row)

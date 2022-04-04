@@ -649,7 +649,7 @@ button#reset {
   text-overflow: ellipsis;
   /* max-width: 6em; */
   overflow: hidden;
-  width: 7em;
+  /* width: 7em; */
 }
 #leaderboard tr td:nth-of-type(2) {
   text-align: right;
@@ -679,6 +679,12 @@ button#reset {
   font-weight: 500;
 }
 
+#banner {
+  min-width: calc(11.8em + 16px);
+}
+#result-leaderboard table {
+  width: 100%;
+}
 #result-leaderboard {
   font-size: 0.8em;
   /* min-width: calc(11.8em + 16px); */
@@ -772,4 +778,43 @@ button#show-leaderboard {
   padding: 0.25em 0.5em;
   margin: 10px 0 -10px;
   cursor: pointer;
+}
+
+
+#loading-dots span:first-of-type {
+  /* animation: dot1 1s infinite; */
+  animation: dot1 2s infinite;
+}
+#loading-dots span:nth-of-type(2) {
+  /* animation: dot2 1s infinite 0.25s; */
+  animation: dot2 2s infinite;
+}
+#loading-dots span:nth-of-type(3) {
+  /* animation: dot3 1s infinite 0.5s; */
+  animation: dot3 2s infinite;
+}
+#loading-dots {
+  animation-timing-function: step-start;
+  /* animation-timing-function: linear; */
+}
+
+/* from {color: white;} to {color: black;} */
+/* @keyframes dot1 {
+  0% {color: white;} 25%, 100% {color: black;}
+}
+@keyframes dot2 {
+  0%{color: white;} 50%, 100% {color: black;}
+}
+@keyframes dot3 {
+  0% {color: white;} 75%, 100% {color: black;}
+} */
+
+@keyframes dot1 {
+  0%, 12.5%, 100%{color: white;} 25%, 50% {color: black;}
+}
+@keyframes dot2 {
+  0%, 25%, 100% {color: white;} 37.5%, 62.5% {color: black;}
+}
+@keyframes dot3 {
+  0%, 37.5%, 100% {color: white;} 50%, 75% {color: black;}
 }
