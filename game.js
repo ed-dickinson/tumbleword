@@ -162,14 +162,15 @@ const gameLost = () => {
 
   let words = level;
 
+
+  if (debug_mode) {high_score = true; points += 10; words++;}
+
+
   banner_message.innerHTML = high_score
     ? '<div>HIGH</div><div>SCORE!</div>'
     : '<div>GAME</div><div>OVER</div>';
 
   banner_result.innerHTML = `You got ${level===0?'no':level} word${level===1?'':'s'}, <br>${points} points, <br> ${level>0?'but':'and'} didn't get<br /><span class="word-display">${target_word.toUpperCase()}</span>`;
-
-
-  // high_score = true;
 
 
   if (high_score) {
@@ -323,7 +324,7 @@ const downTrigger = () => {
 
     let sss = level===0 ? 20 : 25;
 
-    // sss = 10; // TESTING
+    if (debug_mode) {sss = 5;} // TESTING
 
     gamePlayLoop = setInterval(gamePlay, speed*sss) // double speed
     fast_drop_mode_on = true;
